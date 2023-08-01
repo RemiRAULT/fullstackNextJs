@@ -5,9 +5,9 @@ export default async function handler(req, res) {
     case "GET":
       return await getTask(req, res);
     case "DELETE":
-      return await deleteUser(req, res);
+      return await deleteEvent(req, res);
     case "PUT":
-      return await updateUser(req, res);
+      return await updateEvent(req, res);
     default:
       return res.status(400).json({ message: "bad request" });
   }
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
 const getTask = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM user WHERE id = ?", [
+    const result = await pool.query("SELECT * FROM event WHERE id = ?", [
       req.query.id,
     ]);
     return res.status(200).json(result[0]);
@@ -24,19 +24,19 @@ const getTask = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteEvent = async (req, res) => {
   try {
-    await pool.query("DELETE FROM user WHERE id = ?", [req.query.id]);
+    await pool.query("DELETE FROM event WHERE id = ?", [req.query.id]);
     return res.status(204).json();
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-const updateUser = async (req, res) => {
+const updateEvent = async (req, res) => {
   try {
     console.log(req.body)
-    await pool.query("UPDATE user SET ? WHERE id = ?", [
+    await pool.query("UPDATE event SET ? WHERE id = ?", [
       req.body,
       req.query.id,
     ]);

@@ -1,2 +1,2 @@
-import newPage from "pages/new";
-export default newPage;
+import NewUser from "pages/new";
+export default NewUser;

@@ -16,10 +16,13 @@ function UserPage({ user }) {
     }
   };
 
+
+
   return (
     <Layout>
       <div className="p-6 bg-white dark:bg-gray-800">
         <p>Email : {user.email}</p>
+
         <p>Role : {user.role}</p>
       </div>
 

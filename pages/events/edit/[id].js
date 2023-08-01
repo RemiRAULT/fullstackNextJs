@@ -1,2 +1,2 @@
-import newPage from "pages/new";
-export default newPage;
+import NewEvent from "pages/newevent";
+export default NewEvent;

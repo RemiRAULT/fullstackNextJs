@@ -1,34 +1,34 @@
 import axios from "axios";
 import { Layout } from "components/Layout";
-import { UserCard } from "components/UserCard";
+import { EventCard } from "components/EventCard";
 
-function UsersPage({ users = [] }) {
-  const renderUsers = () => {
-    if (users.length === 0) return <h1>No Users</h1>;
-    return users.map((user) => (
-      <UserCard key={user.id} user={user} />
+function EventsPage({ events = [] }) {
+  const renderEvents = () => {
+    if (events.length === 0) return <h1>No Events</h1>;
+    return events.map((event) => (
+      <EventCard key={event.id} event={event} />
     ));
   };
 
   return (
     <Layout>
       <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
-        {renderUsers()}
+        {renderEvents()}
       </div>
     </Layout>
   );
 }
 
-export default UsersPage;
+export default EventsPage;
 
 export const getServerSideProps = async () => {
-  const { data: users } = await axios.get(
-    "http://localhost:3000/api/users"
+  const { data: events } = await axios.get(
+    "http://localhost:3000/api/events"
   );
 
   return {
     props: {
-      users,
+      events,
     },
   };
 };

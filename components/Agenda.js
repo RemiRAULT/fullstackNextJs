@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import "moment/locale/fr"; 
 import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-moment.locale("fr-fr");
+moment.locale("fr");
 const localizer = momentLocalizer(moment);
 
 export default function ReactBigCalendar() {
@@ -30,6 +31,8 @@ export default function ReactBigCalendar() {
     // Your code for handling navigation (e.g., changing the displayed date)
     console.log("Navigated to date:", date);
   };
+
+  
 
   return (
     <div className="App">
@@ -66,6 +69,7 @@ function CustomToolbar({ label, onView, onNavigate }) {
   const handleNext = () => {
     onNavigate("NEXT");
   };
+
 
   return (
     <div className="bg-gray-200 dark:bg-gray-800 p-4 flex justify-between items-center">

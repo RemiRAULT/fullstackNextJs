@@ -1,24 +1,24 @@
 import axios from "axios";
-import { UserForm } from "components/UserForm";
+import { EventForm } from "components/EventForm";
 import { Layout } from "components/Layout";
 
-function NewUser() {
+function NewEvent() {
   return (
     <Layout>
       <div className="h-5/6 grid place-items-center">
-        <UserForm />
+        <EventForm />
       </div>
     </Layout>
   );
 }
-export default NewUser;
+export default NewEvent;
 
 export const getServerSideProps = async (context) => {
-  const res = await axios.get("http://localhost:3000/api/users");
+  const res = await axios.get("http://localhost:3000/api/events");
 
   return {
     props: {
-      users: res.data,
+      events: res.data,
     },
   };
 };
