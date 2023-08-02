@@ -2,6 +2,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Layout } from "components/Layout";
+import moment from "moment";
+import "moment/locale/fr"; 
 
 function EventPage({ event }) {
   const router = useRouter();
@@ -15,13 +17,15 @@ function EventPage({ event }) {
       console.error(error.response.data.message);
     }
   };
+    const formattedDateStart = moment(event.datestart).format("DD/MM/YYYY HH:mm");
+    const formattedDateEnd = moment(event.dateend).format("DD/MM/YYYY HH:mm");
 
   return (
     <Layout>
       <div className="p-6 bg-white dark:bg-gray-800">
         <p>Titre : {event.titre}</p>
-        <p>Date de début : {event.datestart}</p>
-        <p>Date de fin : {event.dateend}</p>
+        <p>Date de début : {formattedDateStart}</p>
+        <p>Date de fin : {formattedDateEnd}</p>
       </div>
 
       <div className="mt-7 flex justify-center">

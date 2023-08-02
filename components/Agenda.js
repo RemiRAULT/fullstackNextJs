@@ -5,6 +5,7 @@ import moment from "moment";
 import "moment/locale/fr"; 
 import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { EventForm } from "components/EventForm";
 
 moment.locale("fr");
 const localizer = momentLocalizer(moment);
@@ -134,3 +135,4 @@ function CustomAgendaEvent({ event }) {
     </div>
   );
 }
+

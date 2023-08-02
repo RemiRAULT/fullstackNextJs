@@ -2,6 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import moment from "moment";
+import "moment/locale/fr"; 
+
 
 export function EventForm() {
   const [event, setEvent] = useState({
@@ -35,7 +38,7 @@ export function EventForm() {
         await axios.put("/api/events/" + router.query.id, {
           titre: event.titre,
           datestart: event.datestart,
-          datefin: event.datefin,
+          dateend: event.dateend,
         });
         toast.success("Task Updated", {
           position: "bottom-center",
@@ -52,6 +55,10 @@ export function EventForm() {
       toast.error(error.response.data.message);
     }
   };
+
+  event.datestart = moment(event.datestart).format("YYYY-MM-DDTHH:mm");
+  event.dateend = moment(event.dateend).format("YYYY-MM-DDTHH:mm");
+  
 
   return (
     <div className="w-full max-w-xs">
@@ -98,7 +105,7 @@ export function EventForm() {
             htmlFor="dateend"
             className="block text-gray-700 dark:text-white font-bold mb-2 text-sm"
           >
-            Date de début :
+            Date de fin :
           </label>
           <input
             type="datetime-local"
