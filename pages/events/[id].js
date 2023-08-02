@@ -12,7 +12,7 @@ function EventPage({ event }) {
     try {
       await axios.delete("/api/events/" + id);
       toast.success("Task deleted");
-      router.push("/");
+      router.push("/agenda");
     } catch (error) {
       console.error(error.response.data.message);
     }

@@ -1,64 +1,71 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import moment from "moment";
-import "moment/locale/fr"; 
+import "moment/locale/fr";
 
-
-export function EventForm() {
-  const [event, setEvent] = useState({
-    titre: "",
-  });
+export function EventForm({ selectedSlot }) {
+  const [title, setTitle] = useState(selectedSlot.title || "");
+  const [start, setStart] = useState(
+    moment(selectedSlot.start).format("YYYY-MM-DDTHH:mm") || ""
+  );
+  const [end, setEnd] = useState(
+    moment(selectedSlot.end).format("YYYY-MM-DDTHH:mm") || ""
+  );
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchEvent = async (id) => {
-      try {
-        const { data } = await axios.get("/api/events/" + id);
-        setEvent(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (router.query?.id) {
-      fetchEvent(router.query.id);
+  const handleChange = ({ target: { name, value } }) => {
+    if (name === "datestart") {
+      setStart(value);
+    } else if (name === "dateend") {
+      setEnd(value);
+    } else {
+      setTitle(value);
     }
-    console.log("called");
-  }, [router.query.id]);
-
-  const handleChange = ({ target: { name, value } }) =>
-    setEvent({ ...event, [name]: value });
+  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (router.query?.id) {
-        await axios.put("/api/events/" + router.query.id, {
-          titre: event.titre,
-          datestart: event.datestart,
-          dateend: event.dateend,
+      if (selectedSlot.id) {
+        await axios.put("/api/events/" + selectedSlot.id, {
+          titre: title,
+          datestart: start,
+          dateend: end,
         });
-        toast.success("Task Updated", {
+        toast.success("Event Updated", {
           position: "bottom-center",
         });
       } else {
-        await axios.post("/api/events", event);
-        toast.success("Task Saved", {
+        await axios.post("/api/events", {
+          titre: title,
+          datestart: start,
+          dateend: end,
+        });
+        toast.success("Event Saved", {
           position: "bottom-center",
         });
       }
 
-      router.push("/events");
+      router.push("/agenda");
+      window.location.reload();
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
 
-  event.datestart = moment(event.datestart).format("YYYY-MM-DDTHH:mm");
-  event.dateend = moment(event.dateend).format("YYYY-MM-DDTHH:mm");
-  
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete("/api/events/" + id);
+      toast.success("Event deleted");
+      router.push("/agenda");
+      window.location.reload();
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
+  };
 
   return (
     <div className="w-full max-w-xs">
@@ -80,7 +87,7 @@ export function EventForm() {
             id="titre"
             name="titre"
             onChange={handleChange}
-            value={event.titre}
+            value={title}
             autoComplete="off"
           />
         </div>
@@ -97,7 +104,7 @@ export function EventForm() {
             id="datestart"
             name="datestart"
             onChange={handleChange}
-            value={event.datestart}
+            value={start}
           />
         </div>
         <div className="mb-4">
@@ -113,13 +120,21 @@ export function EventForm() {
             id="dateend"
             name="dateend"
             onChange={handleChange}
-            value={event.dateend}
+            value={end}
           />
         </div>
 
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-          {router.query?.id ? "Update Event" : "Save Event"}
+          {selectedSlot.id ? "Mettre à jour l'événement" : "Enregistrer l'événement"}
         </button>
+        {selectedSlot.id && (
+          <button
+            className="bg-red-500 hover:bg-red-700 py-2 px-3 rounded mt-3"
+            onClick={() => handleDelete(selectedSlot.id)}
+          >
+            Supprimer
+          </button>
+        )}
       </form>
     </div>
   );
